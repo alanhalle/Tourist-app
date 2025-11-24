@@ -72,6 +72,35 @@ async def get_markers_by_layer(layer_id: str):
     markers = await db.markers.find({"layer_id": layer_id}, {"_id": 0}).to_list(1000)
     return markers
 
+@api_router.post("/admin/add-google-maps-urls")
+async def add_google_maps_urls():
+    """Add Google Maps URLs to existing markers that don't have them"""
+    try:
+        markers = await db.markers.find({}, {"_id": 0}).to_list(1000)
+        updated_count = 0
+        
+        for marker in markers:
+            if not marker.get('google_maps_url'):
+                google_maps_url = generate_google_maps_url(
+                    marker['lat'], 
+                    marker['lng'], 
+                    marker['name']
+                )
+                await db.markers.update_one(
+                    {"id": marker['id']},
+                    {"$set": {"google_maps_url": google_maps_url}}
+                )
+                updated_count += 1
+        
+        return {
+            "success": True,
+            "updated_count": updated_count,
+            "message": f"Added Google Maps URLs to {updated_count} markers"
+        }
+    except Exception as e:
+        logger.error(f"Error adding Google Maps URLs: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Helper function to generate Google Maps URL
 def generate_google_maps_url(lat: float, lng: float, name: str = None) -> str:
     """Generate a Google Maps URL for a location"""
