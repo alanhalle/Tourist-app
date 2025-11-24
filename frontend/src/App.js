@@ -108,7 +108,7 @@ function App() {
           <div className="header-content">
             <div className="header-title">
               <MapPin className="header-icon" />
-              <h1>Mapa Interativo de Ilhéus</h1>
+              <h1>Melhor de Ilheus</h1>
             </div>
             <button
               data-testid="toggle-sidebar-btn"
