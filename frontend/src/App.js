@@ -3,8 +3,10 @@ import "@/App.css";
 import axios from "axios";
 import { LoadScript, GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import { Switch } from "@/components/ui/switch";
-import { MapPin, Layers } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MapPin, Layers, Settings } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
