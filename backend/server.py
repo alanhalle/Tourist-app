@@ -147,13 +147,17 @@ async def sync_google_sheet(sheet_url: str):
             # Geocode the place
             location = geocode_place(name)
             if location:
+                # Generate Google Maps URL
+                google_maps_url = f"https://www.google.com/maps/search/?api=1&query={location['lat']},{location['lng']}"
+                
                 marker = {
                     "id": str(uuid.uuid4()),
                     "name": name,
                     "description": description or f"{name} em Ilhéus",
                     "lat": location['lat'],
                     "lng": location['lng'],
-                    "layer_id": category
+                    "layer_id": category,
+                    "google_maps_url": google_maps_url
                 }
                 new_markers.append(marker)
             else:
