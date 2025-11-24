@@ -72,6 +72,18 @@ async def get_markers_by_layer(layer_id: str):
     markers = await db.markers.find({"layer_id": layer_id}, {"_id": 0}).to_list(1000)
     return markers
 
+# Helper function to generate Google Maps URL
+def generate_google_maps_url(lat: float, lng: float, name: str = None) -> str:
+    """Generate a Google Maps URL for a location"""
+    if name:
+        # Use place name for better mobile experience
+        import urllib.parse
+        query = urllib.parse.quote(f"{name}, Ilhéus, Bahia, Brazil")
+        return f"https://www.google.com/maps/search/?api=1&query={query}"
+    else:
+        # Use coordinates
+        return f"https://www.google.com/maps/search/?api=1&query={lat},{lng}"
+
 # Geocoding helper function
 def geocode_place(place_name: str) -> Optional[Dict]:
     """Geocode a place name in Ilhéus using Google Maps Geocoding API"""
