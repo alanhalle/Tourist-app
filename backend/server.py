@@ -281,6 +281,56 @@ async def seed_database():
                 "lat": -14.7897,
                 "lng": -39.0493,
                 "layer_id": "tourist_sights"
+            },
+            
+            # Beaches
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia dos Milionários",
+                "description": "Praia urbana mais famosa de Ilhéus, com quiosques e ótima infraestrutura.",
+                "lat": -14.7995,
+                "lng": -39.0385,
+                "layer_id": "beaches"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia do Cristo",
+                "description": "Praia tranquila com águas calmas, ideal para famílias.",
+                "lat": -14.8045,
+                "lng": -39.0351,
+                "layer_id": "beaches"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia do Sul",
+                "description": "Praia extensa com areias claras e coqueirais.",
+                "lat": -14.8156,
+                "lng": -39.0298,
+                "layer_id": "beaches"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia dos Coqueiros",
+                "description": "Praia cercada por coqueiros, ótima para caminhadas.",
+                "lat": -14.8089,
+                "lng": -39.0321,
+                "layer_id": "beaches"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia do Marciano",
+                "description": "Praia rústica e preservada, perfeita para relaxar.",
+                "lat": -14.7823,
+                "lng": -39.0512,
+                "layer_id": "beaches"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia da Concha",
+                "description": "Praia protegida com mar calmo, ideal para banho.",
+                "lat": -14.7878,
+                "lng": -39.0468,
+                "layer_id": "beaches"
             }
         ]
         
