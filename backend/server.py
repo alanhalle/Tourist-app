@@ -339,4 +339,71 @@ async def seed_database():
         
         logger.info(f"Seeded {len(layers)} layers and {len(markers)} markers")
     else:
-        logger.info("Database already contains data, skipping seed")
+        # Check if beaches layer exists, if not add it
+        beaches_layer = await db.layers.find_one({"id": "beaches"})
+        if not beaches_layer:
+            logger.info("Adding beaches layer to existing data...")
+            new_layer = {
+                "id": "beaches",
+                "name": "Praias",
+                "color": "#6EC1E4",
+                "icon": "beach_access",
+                "visible": True
+            }
+            await db.layers.insert_one(new_layer)
+            
+            # Add beach markers
+            beach_markers = [
+                {
+                    "id": str(uuid.uuid4()),
+                    "name": "Praia dos Milionários",
+                    "description": "Praia urbana mais famosa de Ilhéus, com quiosques e ótima infraestrutura.",
+                    "lat": -14.7995,
+                    "lng": -39.0385,
+                    "layer_id": "beaches"
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "name": "Praia do Cristo",
+                    "description": "Praia tranquila com águas calmas, ideal para famílias.",
+                    "lat": -14.8045,
+                    "lng": -39.0351,
+                    "layer_id": "beaches"
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "name": "Praia do Sul",
+                    "description": "Praia extensa com areias claras e coqueirais.",
+                    "lat": -14.8156,
+                    "lng": -39.0298,
+                    "layer_id": "beaches"
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "name": "Praia dos Coqueiros",
+                    "description": "Praia cercada por coqueiros, ótima para caminhadas.",
+                    "lat": -14.8089,
+                    "lng": -39.0321,
+                    "layer_id": "beaches"
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "name": "Praia do Marciano",
+                    "description": "Praia rústica e preservada, perfeita para relaxar.",
+                    "lat": -14.7823,
+                    "lng": -39.0512,
+                    "layer_id": "beaches"
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "name": "Praia da Concha",
+                    "description": "Praia protegida com mar calmo, ideal para banho.",
+                    "lat": -14.7878,
+                    "lng": -39.0468,
+                    "layer_id": "beaches"
+                }
+            ]
+            await db.markers.insert_many(beach_markers)
+            logger.info(f"Added beaches layer with {len(beach_markers)} markers")
+        else:
+            logger.info("Database already contains beaches layer")
