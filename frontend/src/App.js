@@ -113,14 +113,24 @@ function MapView() {
               <MapPin className="header-icon" />
               <h1>Melhor de Ilheus</h1>
             </div>
-            <button
-              data-testid="toggle-sidebar-btn"
-              className="toggle-sidebar-btn"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-            >
-              <Layers size={20} />
-              {sidebarOpen ? "Ocultar" : "Mostrar"} Camadas
-            </button>
+            <div className="header-actions">
+              <button
+                data-testid="toggle-sidebar-btn"
+                className="toggle-sidebar-btn"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+              >
+                <Layers size={20} />
+                {sidebarOpen ? "Ocultar" : "Mostrar"} Camadas
+              </button>
+              <Button
+                data-testid="admin-btn"
+                className="admin-btn"
+                onClick={() => navigate("/admin")}
+              >
+                <Settings size={20} />
+                Admin
+              </Button>
+            </div>
           </div>
         </header>
 
