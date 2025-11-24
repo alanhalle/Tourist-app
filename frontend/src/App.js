@@ -120,7 +120,7 @@ function MapView() {
                 onClick={() => setSidebarOpen(!sidebarOpen)}
               >
                 <Layers size={20} />
-                {sidebarOpen ? "Ocultar" : "Mostrar"} Camadas
+                {sidebarOpen ? "Ocultar" : "Mostrar"} Lugares
               </button>
               <Button
                 data-testid="admin-btn"
