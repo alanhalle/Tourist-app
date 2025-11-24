@@ -6,9 +6,13 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List, Optional
+from typing import List, Optional, Dict
 import uuid
 from datetime import datetime, timezone
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import requests
+import asyncio
 
 
 ROOT_DIR = Path(__file__).parent
