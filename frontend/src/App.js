@@ -1,52 +1,196 @@
-import { useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
+import { LoadScript, GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
+import { Switch } from "@/components/ui/switch";
+import { MapPin, Layers } from "lucide-react";
+import { toast } from "sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+const GOOGLE_MAPS_KEY = process.env.REACT_APP_GOOGLE_MAPS_KEY;
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+const mapContainerStyle = {
+  width: "100%",
+  height: "100vh",
+};
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+const center = {
+  lat: -14.7947,
+  lng: -39.0495,
+};
 
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
+const mapOptions = {
+  disableDefaultUI: false,
+  zoomControl: true,
+  mapTypeControl: false,
+  streetViewControl: false,
+  fullscreenControl: true,
 };
 
 function App() {
+  const [layers, setLayers] = useState([]);
+  const [markers, setMarkers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [layersRes, markersRes] = await Promise.all([
+        axios.get(`${API}/layers`),
+        axios.get(`${API}/markers`),
+      ]);
+      setLayers(layersRes.data);
+      setMarkers(markersRes.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Erro ao carregar dados do mapa");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleLayer = useCallback((layerId) => {
+    setLayers((prev) =>
+      prev.map((layer) =>
+        layer.id === layerId ? { ...layer, visible: !layer.visible } : layer
+      )
+    );
+  }, []);
+
+  const getVisibleMarkers = useCallback(() => {
+    const visibleLayerIds = layers
+      .filter((layer) => layer.visible)
+      .map((layer) => layer.id);
+    return markers.filter((marker) => visibleLayerIds.includes(marker.layer_id));
+  }, [layers, markers]);
+
+  const getLayerColor = useCallback(
+    (layerId) => {
+      const layer = layers.find((l) => l.id === layerId);
+      return layer ? layer.color : "#000000";
+    },
+    [layers]
+  );
+
+  const createCustomIcon = (color) => {
+    return {
+      path: "M12 0C7.58 0 4 3.58 4 8c0 5.5 8 13 8 13s8-7.5 8-13c0-4.42-3.58-8-8-8zm0 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z",
+      fillColor: color,
+      fillOpacity: 1,
+      strokeColor: "#ffffff",
+      strokeWeight: 2,
+      scale: 1.5,
+      anchor: { x: 12, y: 24 },
+    };
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-container" data-testid="loading-spinner">
+        <div className="spinner"></div>
+        <p>Carregando mapa de Ilhéus...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <div className="App" data-testid="app-container">
+      <LoadScript googleMapsApiKey={GOOGLE_MAPS_KEY}>
+        {/* Header */}
+        <header className="map-header" data-testid="map-header">
+          <div className="header-content">
+            <div className="header-title">
+              <MapPin className="header-icon" />
+              <h1>Mapa Interativo de Ilhéus</h1>
+            </div>
+            <button
+              data-testid="toggle-sidebar-btn"
+              className="toggle-sidebar-btn"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              <Layers size={20} />
+              {sidebarOpen ? "Ocultar" : "Mostrar"} Camadas
+            </button>
+          </div>
+        </header>
+
+        {/* Sidebar */}
+        <aside
+          className={`sidebar ${sidebarOpen ? "open" : "closed"}`}
+          data-testid="sidebar"
+        >
+          <div className="sidebar-header">
+            <Layers size={24} />
+            <h2>Camadas</h2>
+          </div>
+          <div className="layers-list">
+            {layers.map((layer) => (
+              <div
+                key={layer.id}
+                className="layer-item"
+                data-testid={`layer-item-${layer.id}`}
+              >
+                <div className="layer-info">
+                  <div
+                    className="layer-color-indicator"
+                    style={{ backgroundColor: layer.color }}
+                  ></div>
+                  <span className="layer-name">{layer.name}</span>
+                </div>
+                <Switch
+                  data-testid={`layer-toggle-${layer.id}`}
+                  checked={layer.visible}
+                  onCheckedChange={() => toggleLayer(layer.id)}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="sidebar-footer">
+            <p className="marker-count">
+              {getVisibleMarkers().length} marcadores visíveis
+            </p>
+          </div>
+        </aside>
+
+        {/* Map */}
+        <div className="map-container" data-testid="map-container">
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={center}
+            zoom={14}
+            options={mapOptions}
+          >
+            {getVisibleMarkers().map((marker) => (
+              <Marker
+                key={marker.id}
+                position={{ lat: marker.lat, lng: marker.lng }}
+                icon={createCustomIcon(getLayerColor(marker.layer_id))}
+                onClick={() => setSelectedMarker(marker)}
+                title={marker.name}
+              />
+            ))}
+
+            {selectedMarker && (
+              <InfoWindow
+                position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
+                onCloseClick={() => setSelectedMarker(null)}
+              >
+                <div className="info-window" data-testid="info-window">
+                  <h3>{selectedMarker.name}</h3>
+                  <p>{selectedMarker.description}</p>
+                </div>
+              </InfoWindow>
+            )}
+          </GoogleMap>
+        </div>
+      </LoadScript>
     </div>
   );
 }

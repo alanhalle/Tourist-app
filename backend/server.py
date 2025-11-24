@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,7 +6,7 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
@@ -27,44 +27,46 @@ api_router = APIRouter(prefix="/api")
 
 
 # Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
+class Layer(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    name: str
+    color: str
+    icon: str
+    visible: bool = True
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+class Marker(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    lat: float
+    lng: float
+    layer_id: str
 
-# Add your routes to the router instead of directly to app
+
+# Routes
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Ilhéus Interactive Map API"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
+@api_router.get("/layers", response_model=List[Layer])
+async def get_layers():
+    layers = await db.layers.find({}, {"_id": 0}).to_list(1000)
+    return layers
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/markers", response_model=List[Marker])
+async def get_markers():
+    markers = await db.markers.find({}, {"_id": 0}).to_list(1000)
+    return markers
+
+@api_router.get("/markers/layer/{layer_id}", response_model=List[Marker])
+async def get_markers_by_layer(layer_id: str):
+    markers = await db.markers.find({"layer_id": layer_id}, {"_id": 0}).to_list(1000)
+    return markers
+
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -87,3 +89,197 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+# Seed data on startup
+@app.on_event("startup")
+async def seed_database():
+    # Check if data already exists
+    existing_layers = await db.layers.count_documents({})
+    
+    if existing_layers == 0:
+        logger.info("Seeding database with sample data for Ilhéus...")
+        
+        # Create layers
+        layers = [
+            {
+                "id": "restaurants",
+                "name": "Restaurantes",
+                "color": "#FF6B6B",
+                "icon": "restaurant",
+                "visible": True
+            },
+            {
+                "id": "hotels",
+                "name": "Hotéis",
+                "color": "#4ECDC4",
+                "icon": "hotel",
+                "visible": True
+            },
+            {
+                "id": "tourist_sights",
+                "name": "Pontos Turísticos",
+                "color": "#FFD93D",
+                "icon": "place",
+                "visible": True
+            }
+        ]
+        
+        # Create markers for Ilhéus
+        markers = [
+            # Restaurants
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Restaurante Barra Grande",
+                "description": "Culinária regional com frutos do mar frescos e vista para o mar.",
+                "lat": -14.7947,
+                "lng": -39.0447,
+                "layer_id": "restaurants"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Pizzaria Tia Déia",
+                "description": "Pizzas artesanais em forno à lenha, ambiente aconchegante.",
+                "lat": -14.7889,
+                "lng": -39.0495,
+                "layer_id": "restaurants"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Vesúvio Bar",
+                "description": "Bar histórico frequentado por Jorge Amado, petiscos tradicionais.",
+                "lat": -14.7923,
+                "lng": -39.0478,
+                "layer_id": "restaurants"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Restaurante Cabana Gabriela",
+                "description": "Moqueca baiana tradicional e pratos típicos da região.",
+                "lat": -14.7951,
+                "lng": -39.0443,
+                "layer_id": "restaurants"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Sabor da Terra",
+                "description": "Comida caseira baiana com tempero especial e acarajé delicioso.",
+                "lat": -14.7905,
+                "lng": -39.0511,
+                "layer_id": "restaurants"
+            },
+            
+            # Hotels
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Hotel Jardim Atlântico",
+                "description": "Hotel resort à beira-mar com piscinas, spa e restaurante.",
+                "lat": -14.8127,
+                "lng": -39.0331,
+                "layer_id": "hotels"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Pousada Vila das Pedras",
+                "description": "Pousada charmosa com arquitetura colonial e café da manhã regional.",
+                "lat": -14.7891,
+                "lng": -39.0489,
+                "layer_id": "hotels"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Ilhéus Praia Hotel",
+                "description": "Hotel moderno no centro histórico com vista para a Catedral.",
+                "lat": -14.7915,
+                "lng": -39.0485,
+                "layer_id": "hotels"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Cana Brava Resort",
+                "description": "Resort all-inclusive com praia particular e atividades aquáticas.",
+                "lat": -14.8234,
+                "lng": -39.0289,
+                "layer_id": "hotels"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Pousada dos Hibiscos",
+                "description": "Pousada boutique com jardim tropical e atendimento personalizado.",
+                "lat": -14.7967,
+                "lng": -39.0401,
+                "layer_id": "hotels"
+            },
+            
+            # Tourist Sights
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Casa de Jorge Amado",
+                "description": "Museu dedicado ao escritor Jorge Amado com acervo pessoal.",
+                "lat": -14.7919,
+                "lng": -39.0476,
+                "layer_id": "tourist_sights"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Catedral de São Sebastião",
+                "description": "Igreja histórica do século XVI com arquitetura colonial.",
+                "lat": -14.7928,
+                "lng": -39.0481,
+                "layer_id": "tourist_sights"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Bataclan (Casa de Gabriela)",
+                "description": "Cenário do romance Gabriela Cravo e Canela, bar icônico.",
+                "lat": -14.7921,
+                "lng": -39.0479,
+                "layer_id": "tourist_sights"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia dos Milionários",
+                "description": "Praia urbana famosa com orla arborizada e quiosques.",
+                "lat": -14.7983,
+                "lng": -39.0393,
+                "layer_id": "tourist_sights"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Fazenda Yrerê (Fazenda de Cacau)",
+                "description": "Fazenda histórica de cacau com tour pela plantação.",
+                "lat": -14.8456,
+                "lng": -39.0723,
+                "layer_id": "tourist_sights"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Teatro Municipal de Ilhéus",
+                "description": "Teatro centenário com apresentações culturais e shows.",
+                "lat": -14.7925,
+                "lng": -39.0483,
+                "layer_id": "tourist_sights"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Praia do Cristo",
+                "description": "Praia com Cristo Redentor e mirante com vista panorâmica.",
+                "lat": -14.8056,
+                "lng": -39.0341,
+                "layer_id": "tourist_sights"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Porto de Ilhéus",
+                "description": "Porto histórico do ciclo do cacau, belo pôr do sol.",
+                "lat": -14.7897,
+                "lng": -39.0493,
+                "layer_id": "tourist_sights"
+            }
+        ]
+        
+        await db.layers.insert_many(layers)
+        await db.markers.insert_many(markers)
+        
+        logger.info(f"Seeded {len(layers)} layers and {len(markers)} markers")
+    else:
+        logger.info("Database already contains data, skipping seed")
