@@ -30,12 +30,13 @@ const mapOptions = {
   fullscreenControl: true,
 };
 
-function App() {
+function MapView() {
   const [layers, setLayers] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
