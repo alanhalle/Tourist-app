@@ -71,6 +71,117 @@ async def get_markers_by_layer(layer_id: str):
     markers = await db.markers.find({"layer_id": layer_id}, {"_id": 0}).to_list(1000)
     return markers
 
+# Geocoding helper function
+def geocode_place(place_name: str) -> Optional[Dict]:
+    """Geocode a place name in Ilhéus using Google Maps Geocoding API"""
+    try:
+        api_key = os.environ.get('GOOGLE_MAPS_KEY')
+        if not api_key:
+            logger.error("GOOGLE_MAPS_KEY not found in environment")
+            return None
+            
+        # Add Ilhéus context to improve accuracy
+        query = f"{place_name}, Ilhéus, Bahia, Brazil"
+        url = f"https://maps.googleapis.com/maps/api/geocode/json"
+        params = {
+            "address": query,
+            "key": api_key
+        }
+        
+        response = requests.get(url, params=params)
+        data = response.json()
+        
+        if data['status'] == 'OK' and len(data['results']) > 0:
+            location = data['results'][0]['geometry']['location']
+            return {
+                'lat': location['lat'],
+                'lng': location['lng']
+            }
+        else:
+            logger.warning(f"Geocoding failed for '{place_name}': {data.get('status')}")
+            return None
+    except Exception as e:
+        logger.error(f"Geocoding error for '{place_name}': {str(e)}")
+        return None
+
+# Google Sheets sync endpoint
+@api_router.post("/admin/sync-sheet")
+async def sync_google_sheet(sheet_url: str):
+    """Sync markers from Google Sheet"""
+    try:
+        # Extract sheet ID from URL
+        if '/d/' in sheet_url:
+            sheet_id = sheet_url.split('/d/')[1].split('/')[0]
+        else:
+            raise HTTPException(status_code=400, detail="Invalid Google Sheet URL")
+        
+        # Read from Google Sheets (public sheet)
+        url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv"
+        response = requests.get(url)
+        
+        if response.status_code != 200:
+            raise HTTPException(status_code=400, detail="Could not access Google Sheet. Make sure it's shared publicly.")
+        
+        # Parse CSV
+        import csv
+        import io
+        csv_data = csv.DictReader(io.StringIO(response.text))
+        
+        new_markers = []
+        geocode_errors = []
+        
+        for row in csv_data:
+            name = row.get('Name', '').strip()
+            category = row.get('Category', '').strip().lower()
+            description = row.get('Description', '').strip()
+            
+            if not name or not category:
+                continue
+            
+            # Validate category
+            if category not in ['restaurants', 'hotels', 'beaches', 'sights']:
+                logger.warning(f"Invalid category '{category}' for '{name}', skipping")
+                continue
+            
+            # Geocode the place
+            location = geocode_place(name)
+            if location:
+                marker = {
+                    "id": str(uuid.uuid4()),
+                    "name": name,
+                    "description": description or f"{name} em Ilhéus",
+                    "lat": location['lat'],
+                    "lng": location['lng'],
+                    "layer_id": category
+                }
+                new_markers.append(marker)
+            else:
+                geocode_errors.append(name)
+        
+        if not new_markers:
+            return {
+                "success": False,
+                "message": "No valid markers found in sheet",
+                "geocode_errors": geocode_errors
+            }
+        
+        # Replace markers in database
+        await db.markers.delete_many({})
+        await db.markers.insert_many(new_markers)
+        
+        logger.info(f"Synced {len(new_markers)} markers from Google Sheet")
+        
+        return {
+            "success": True,
+            "markers_added": len(new_markers),
+            "geocode_errors": geocode_errors,
+            "message": f"Successfully synced {len(new_markers)} markers"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error syncing sheet: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 # Include the router in the main app
 app.include_router(api_router)
