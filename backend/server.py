@@ -49,6 +49,7 @@ class Marker(BaseModel):
     lat: float
     lng: float
     layer_id: str
+    google_maps_url: Optional[str] = None
 
 
 # Routes
