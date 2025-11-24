@@ -208,4 +208,4 @@ function MapView() {
   );
 }
 
-export default App;
+export default MapView;
