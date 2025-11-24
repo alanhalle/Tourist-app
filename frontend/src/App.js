@@ -141,7 +141,7 @@ function MapView() {
         >
           <div className="sidebar-header">
             <Layers size={24} />
-            <h2>Camadas</h2>
+            <h2>Lugares</h2>
           </div>
           <div className="layers-list">
             {layers.map((layer) => (
