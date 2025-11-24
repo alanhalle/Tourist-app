@@ -198,6 +198,17 @@ function MapView() {
                 <div className="info-window" data-testid="info-window">
                   <h3>{selectedMarker.name}</h3>
                   <p>{selectedMarker.description}</p>
+                  {selectedMarker.google_maps_url && (
+                    <a
+                      href={selectedMarker.google_maps_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="maps-link"
+                      data-testid="google-maps-link"
+                    >
+                      Abrir no Google Maps →
+                    </a>
+                  )}
                 </div>
               </InfoWindow>
             )}
