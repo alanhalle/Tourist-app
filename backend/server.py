@@ -217,14 +217,14 @@ async def seed_database():
                 "layer_id": "hotels"
             },
             
-            # Tourist Sights
+            # Sights
             {
                 "id": str(uuid.uuid4()),
                 "name": "Casa de Jorge Amado",
                 "description": "Museu dedicado ao escritor Jorge Amado com acervo pessoal.",
                 "lat": -14.7919,
                 "lng": -39.0476,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             {
                 "id": str(uuid.uuid4()),
@@ -232,7 +232,7 @@ async def seed_database():
                 "description": "Igreja histórica do século XVI com arquitetura colonial.",
                 "lat": -14.7928,
                 "lng": -39.0481,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             {
                 "id": str(uuid.uuid4()),
@@ -240,7 +240,7 @@ async def seed_database():
                 "description": "Cenário do romance Gabriela Cravo e Canela, bar icônico.",
                 "lat": -14.7921,
                 "lng": -39.0479,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             {
                 "id": str(uuid.uuid4()),
@@ -248,7 +248,7 @@ async def seed_database():
                 "description": "Praia urbana famosa com orla arborizada e quiosques.",
                 "lat": -14.7983,
                 "lng": -39.0393,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             {
                 "id": str(uuid.uuid4()),
@@ -256,7 +256,7 @@ async def seed_database():
                 "description": "Fazenda histórica de cacau com tour pela plantação.",
                 "lat": -14.8456,
                 "lng": -39.0723,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             {
                 "id": str(uuid.uuid4()),
@@ -264,7 +264,7 @@ async def seed_database():
                 "description": "Teatro centenário com apresentações culturais e shows.",
                 "lat": -14.7925,
                 "lng": -39.0483,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             {
                 "id": str(uuid.uuid4()),
@@ -272,7 +272,7 @@ async def seed_database():
                 "description": "Praia com Cristo Redentor e mirante com vista panorâmica.",
                 "lat": -14.8056,
                 "lng": -39.0341,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             {
                 "id": str(uuid.uuid4()),
@@ -280,7 +280,7 @@ async def seed_database():
                 "description": "Porto histórico do ciclo do cacau, belo pôr do sol.",
                 "lat": -14.7897,
                 "lng": -39.0493,
-                "layer_id": "tourist_sights"
+                "layer_id": "sights"
             },
             
             # Beaches
