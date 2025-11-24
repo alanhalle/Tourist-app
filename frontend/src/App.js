@@ -111,7 +111,7 @@ function MapView() {
           <div className="header-content">
             <div className="header-title">
               <MapPin className="header-icon" />
-              <h1>Melhor de Ilheus</h1>
+              <h1>O Melhor de Ilhéus</h1>
             </div>
             <div className="header-actions">
               <button
