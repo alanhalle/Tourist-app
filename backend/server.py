@@ -116,7 +116,7 @@ async def seed_database():
                 "visible": True
             },
             {
-                "id": "tourist_sights",
+                "id": "sights",
                 "name": "Pontos Turísticos",
                 "color": "#FFD93D",
                 "icon": "place",
