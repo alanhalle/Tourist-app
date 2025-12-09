@@ -121,14 +121,6 @@ function MapView() {
               <h1>O Melhor de Ilhéus</h1>
             </div>
             <div className="header-actions">
-              <button
-                data-testid="toggle-sidebar-btn"
-                className="toggle-sidebar-btn"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-              >
-                <Layers size={20} />
-                {sidebarOpen ? "Ocultar" : "Mostrar"} Lugares
-              </button>
               <Button
                 data-testid="admin-btn"
                 className="admin-btn"
