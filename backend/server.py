@@ -76,8 +76,10 @@ async def get_markers_by_layer(layer_id: str):
 async def add_google_maps_urls():
     """Add Google Maps URLs to existing markers that don't have them"""
     try:
+        from pymongo import UpdateOne
+        
         markers = await db.markers.find({}, {"_id": 0}).to_list(1000)
-        updated_count = 0
+        bulk_operations = []
         
         for marker in markers:
             if not marker.get('google_maps_url'):
@@ -86,11 +88,17 @@ async def add_google_maps_urls():
                     marker['lng'], 
                     marker['name']
                 )
-                await db.markers.update_one(
-                    {"id": marker['id']},
-                    {"$set": {"google_maps_url": google_maps_url}}
+                bulk_operations.append(
+                    UpdateOne(
+                        {"id": marker['id']},
+                        {"$set": {"google_maps_url": google_maps_url}}
+                    )
                 )
-                updated_count += 1
+        
+        updated_count = 0
+        if bulk_operations:
+            result = await db.markers.bulk_write(bulk_operations)
+            updated_count = result.modified_count
         
         return {
             "success": True,
