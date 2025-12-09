@@ -307,18 +307,31 @@ body {
     height: 24px;
   }
 
-  .toggle-sidebar-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-  }
-
-  .sidebar {
-    width: 280px;
-    top: 60px;
-    height: calc(100vh - 60px);
-  }
-
   .map-container {
     top: 60px;
+    bottom: 80px;
+  }
+
+  .bottom-nav {
+    height: 80px;
+    padding: 0 0.5rem;
+  }
+
+  .category-btn {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .category-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .category-icon-wrapper svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .category-label {
+    font-size: 0.75rem;
   }
 }
