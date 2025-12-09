@@ -4,7 +4,7 @@ import axios from "axios";
 import { LoadScript, GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { MapPin, Layers, Settings } from "lucide-react";
+import { MapPin, Settings, Utensils, Hotel, Waves, Landmark } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
