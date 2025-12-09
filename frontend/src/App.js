@@ -35,8 +35,15 @@ function MapView() {
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
+
+  // Icon mapping for categories
+  const categoryIcons = {
+    restaurants: { icon: Utensils, label: "Restaurantes" },
+    hotels: { icon: Hotel, label: "Hotéis" },
+    beaches: { icon: Waves, label: "Praias" },
+    sights: { icon: Landmark, label: "Pontos Turísticos" }
+  };
 
   useEffect(() => {
     fetchData();
