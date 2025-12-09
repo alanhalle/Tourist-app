@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(false); // Disabled for now
 
   useEffect(() => {
     // Check if splash has been shown in this session
