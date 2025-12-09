@@ -133,43 +133,33 @@ function MapView() {
           </div>
         </header>
 
-        {/* Sidebar */}
-        <aside
-          className={`sidebar ${sidebarOpen ? "open" : "closed"}`}
-          data-testid="sidebar"
-        >
-          <div className="sidebar-header">
-            <Layers size={24} />
-            <h2>Lugares</h2>
-          </div>
-          <div className="layers-list">
-            {layers.map((layer) => (
-              <div
+        {/* Bottom Navigation */}
+        <nav className="bottom-nav" data-testid="bottom-nav">
+          {layers.map((layer) => {
+            const categoryInfo = categoryIcons[layer.id];
+            if (!categoryInfo) return null;
+            
+            const Icon = categoryInfo.icon;
+            const isActive = layer.visible;
+            
+            return (
+              <button
                 key={layer.id}
-                className="layer-item"
-                data-testid={`layer-item-${layer.id}`}
+                data-testid={`category-btn-${layer.id}`}
+                className={`category-btn ${isActive ? "active" : ""}`}
+                onClick={() => toggleLayer(layer.id)}
+                style={{
+                  "--category-color": layer.color
+                }}
               >
-                <div className="layer-info">
-                  <div
-                    className="layer-color-indicator"
-                    style={{ backgroundColor: layer.color }}
-                  ></div>
-                  <span className="layer-name">{layer.name}</span>
+                <div className="category-icon-wrapper">
+                  <Icon size={24} />
                 </div>
-                <Switch
-                  data-testid={`layer-toggle-${layer.id}`}
-                  checked={layer.visible}
-                  onCheckedChange={() => toggleLayer(layer.id)}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="sidebar-footer">
-            <p className="marker-count">
-              {getVisibleMarkers().length} marcadores visíveis
-            </p>
-          </div>
-        </aside>
+                <span className="category-label">{categoryInfo.label}</span>
+              </button>
+            );
+          })}
+        </nav>
 
         {/* Map */}
         <div className="map-container" data-testid="map-container">
