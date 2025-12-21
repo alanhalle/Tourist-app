@@ -120,16 +120,6 @@ function MapView() {
               <MapPin className="header-icon" />
               <h1>O Melhor de Ilhéus</h1>
             </div>
-            <div className="header-actions">
-              <Button
-                data-testid="admin-btn"
-                className="admin-btn"
-                onClick={() => navigate("/admin")}
-              >
-                <Settings size={20} />
-                Admin
-              </Button>
-            </div>
           </div>
         </header>
 
