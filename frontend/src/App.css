@@ -139,9 +139,9 @@ body {
   padding: 0.75rem 1.5rem;
   background: transparent;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   flex: 1;
   max-width: 200px;
@@ -153,12 +153,12 @@ body {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 40px;
-  height: 3px;
+  width: 50px;
+  height: 4px;
   background: var(--category-color);
-  border-radius: 0 0 3px 3px;
+  border-radius: 0 0 4px 4px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .category-btn.active::before {
@@ -166,28 +166,30 @@ body {
 }
 
 .category-btn:hover {
-  background: rgba(15, 118, 110, 0.05);
-  transform: translateY(-2px);
+  background: rgba(255, 107, 107, 0.05);
+  transform: translateY(-4px);
 }
 
 .category-icon-wrapper {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  background: #F3F4F6;
-  transition: all 0.3s ease;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .category-btn.active .category-icon-wrapper {
   background: var(--category-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
 }
 
 .category-icon-wrapper svg {
-  color: #6B7280;
+  color: #6C757D;
   transition: color 0.3s ease;
 }
 
@@ -199,13 +201,13 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #4B5563;
-  transition: color 0.3s ease;
+  color: #495057;
+  transition: all 0.3s ease;
 }
 
 .category-btn.active .category-label {
   color: var(--category-color);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* Map Container */
