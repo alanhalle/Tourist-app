@@ -120,10 +120,10 @@ body {
   left: 0;
   right: 0;
   height: 90px;
-  background: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 1) 100%);
   backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(15, 118, 110, 0.1);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  border-top: 2px solid rgba(255, 107, 107, 0.2);
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   display: flex;
   justify-content: space-around;
