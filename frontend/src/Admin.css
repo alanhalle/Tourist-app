@@ -2,16 +2,17 @@
 
 .admin-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%);
+  background: linear-gradient(135deg, #FFE5E5 0%, #FFF4E6 50%, #E8F5F1 100%);
   font-family: 'Inter', sans-serif;
 }
 
 .admin-header {
-  background: linear-gradient(135deg, #0F766E 0%, #14B8A6 100%);
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFA94D 100%);
   padding: 2rem;
   text-align: center;
   color: white;
   position: relative;
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
 }
 
 .back-btn {
