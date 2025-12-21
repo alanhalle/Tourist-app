@@ -294,7 +294,7 @@ async def seed_database():
             {
                 "id": "beaches",
                 "name": "Praias",
-                "color": "#6EC1E4",
+                "color": "#95E1D3",
                 "icon": "beach_access",
                 "visible": True
             }
