@@ -229,15 +229,15 @@ body {
 .info-window h3 {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.1rem;
-  font-weight: 600;
-  color: #0F766E;
+  font-weight: 700;
+  color: #FF6B6B;
   margin-bottom: 0.5rem;
 }
 
 .info-window p {
   font-size: 0.9rem;
-  color: #4B5563;
-  line-height: 1.5;
+  color: #495057;
+  line-height: 1.6;
   margin-bottom: 0.75rem;
 }
 
@@ -246,18 +246,19 @@ body {
   align-items: center;
   gap: 0.25rem;
   padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #0F766E 0%, #14B8A6 100%);
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
   color: white;
   text-decoration: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
 }
 
 .maps-link:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
 }
 
 /* Loading */
