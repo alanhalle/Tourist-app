@@ -79,12 +79,12 @@ function MapView() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Icon mapping for categories
+  // Category icons mapping
   const categoryIcons = {
-    restaurants: { icon: Utensils, label: "Restaurantes" },
-    hotels: { icon: Hotel, label: "Hotéis" },
-    beaches: { icon: Waves, label: "Praias" },
-    sights: { icon: Landmark, label: "Pontos Turísticos" }
+    restaurants: { icon: Utensils, label: "Restaurantes", customIcon: "restaurant-icon.png" },
+    hotels: { icon: Hotel, label: "Hotéis", customIcon: "hotel-icon.png" },
+    beaches: { icon: Waves, label: "Praias", customIcon: "beach-icon.png" },
+    sights: { icon: Landmark, label: "Pontos Turísticos", customIcon: "camera-icon.png" }
   };
 
   useEffect(() => {
