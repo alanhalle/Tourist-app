@@ -131,18 +131,34 @@ function MapView() {
     [layers]
   );
 
-  const createCustomIcon = (color) => {
-    // Create a circular SVG icon
-    const svgMarker = {
-      path: "M 12,2 C 6.5,2 2,6.5 2,12 2,17.5 6.5,22 12,22 17.5,22 22,17.5 22,12 22,6.5 17.5,2 12,2 Z",
-      fillColor: color,
-      fillOpacity: 1,
-      strokeColor: "#ffffff",
-      strokeWeight: 3,
-      scale: 1.2,
-      anchor: { x: 12, y: 12 },
+  const createCustomIcon = (color, layerId) => {
+    // Define icons for each category (SVG paths)
+    const iconPaths = {
+      restaurants: "M8.1,13.34l2.83-2.83L3.91,3.5c-1.56,1.56-1.56,4.09,0,5.66l4.19,4.18z M14.88,11.53c1.53,0.71,3.68,0.21,5.27-1.38 c1.91-1.91,2.39-4.66,1.08-6.27L18,6.12l-3.84-3.84l2.34-2.33c-1.61-1.31-4.36-0.83-6.27,1.08c-1.59,1.59-2.09,3.74-1.38,5.27 L3.7,11.45l8.85,8.85l5.15-5.15L14.88,11.53z",
+      hotels: "M7,13c1.66,0,3-1.34,3-3S8.66,7,7,7S4,8.34,4,10S5.34,13,7,13z M19,7h-8v7H3V5H1v15h2v-3h18v3h2v-9C23,8.34,20.66,7,19,7z",
+      sights: "M12,2C8.13,2,5,5.13,5,9c0,5.25,7,13,7,13s7-7.75,7-13C19,5.13,15.87,2,12,2z M12,11.5c-1.38,0-2.5-1.12-2.5-2.5s1.12-2.5,2.5-2.5 s2.5,1.12,2.5,2.5S13.38,11.5,12,11.5z",
+      beaches: "M13.127,14.56l1.43-1.43l6.44,6.43L19.57,21L13.127,14.56z M17.42,8.83l2.86,2.86l-1.43,1.43l-2.85-2.86L17.42,8.83z M5.95,5.98 c1.19-1.19,2.93-1.45,4.38-0.77L3.66,11.9c-0.68-1.45-0.42-3.19,0.77-4.38l1.52-1.52L5.95,5.98z M5.97,18.06 c-1.19-1.19-1.45-2.93-0.77-4.38l7.69,7.69c-1.45,0.68-3.19,0.42-4.38-0.77L5.97,18.06z"
     };
-    return svgMarker;
+
+    const iconPath = iconPaths[layerId] || iconPaths.sights;
+    
+    // Create SVG with circle background and white icon
+    const svg = `
+      <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="18" fill="${color}" stroke="white" stroke-width="3"/>
+        <g transform="translate(8, 8)">
+          <path d="${iconPath}" fill="white"/>
+        </g>
+      </svg>
+    `;
+    
+    const icon = {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+      scaledSize: { width: 40, height: 40 },
+      anchor: { x: 20, y: 20 }
+    };
+    
+    return icon;
   };
 
   if (loading) {
