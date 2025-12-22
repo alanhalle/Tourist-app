@@ -132,14 +132,17 @@ function MapView() {
   );
 
   const createCustomIcon = (color) => {
-    return {
-      path: google.maps.SymbolPath.CIRCLE,
+    // Create a circular SVG icon
+    const svgMarker = {
+      path: "M 12,2 C 6.5,2 2,6.5 2,12 2,17.5 6.5,22 12,22 17.5,22 22,17.5 22,12 22,6.5 17.5,2 12,2 Z",
       fillColor: color,
       fillOpacity: 1,
       strokeColor: "#ffffff",
       strokeWeight: 3,
-      scale: 12,
+      scale: 1.2,
+      anchor: { x: 12, y: 12 },
     };
+    return svgMarker;
   };
 
   if (loading) {
