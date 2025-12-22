@@ -120,6 +120,16 @@ function MapView() {
     );
   }, []);
 
+  // Close info window when language changes
+  useEffect(() => {
+    if (selectedMarker) {
+      // Force re-render by updating the selected marker
+      const updatedMarker = { ...selectedMarker };
+      setSelectedMarker(null);
+      setTimeout(() => setSelectedMarker(updatedMarker), 10);
+    }
+  }, [language]);
+
   const getVisibleMarkers = useCallback(() => {
     const visibleLayerIds = layers
       .filter((layer) => layer.visible)
