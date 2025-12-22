@@ -269,7 +269,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #FFE5E5 0%, #FFF4E6 50%, #E8F5F1 100%);
+  background: #F5F1E8;
 }
 
 .spinner {
