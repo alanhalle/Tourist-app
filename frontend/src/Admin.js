@@ -14,7 +14,10 @@ export default function Admin() {
   const [sheetUrl, setSheetUrl] = useState("");
   const [syncing, setSyncing] = useState(false);
   const [result, setResult] = useState(null);
+  const [language] = useState(getBrowserLanguage());
   const navigate = useNavigate();
+  
+  const { t } = useTranslation(language);
 
   const handleSync = async () => {
     if (!sheetUrl.trim()) {
