@@ -239,7 +239,20 @@ function MapView() {
           <div className="header-content">
             <div className="header-title">
               <MapPin className="header-icon" />
-              <h1>O Melhor de Ilhéus</h1>
+              <h1>{t('appTitle')}</h1>
+            </div>
+            <div className="language-selector">
+              <Globe size={20} />
+              <select 
+                value={language} 
+                onChange={(e) => setLanguage(e.target.value)}
+                className="language-dropdown"
+                data-testid="language-selector"
+              >
+                <option value="pt">Português</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+              </select>
             </div>
           </div>
         </header>
