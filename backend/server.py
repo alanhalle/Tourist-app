@@ -185,9 +185,18 @@ async def sync_google_sheet(sheet_url: str):
         geocode_errors = []
         
         for row in csv_data:
+            # Support both formats:
+            # Old: Name, Description, Category
+            # New: Name, Name_EN, Name_ES, Description, Description_EN, Description_ES, Category
             name = row.get('Name', '').strip()
-            category = row.get('Category', '').strip().lower()
+            name_en = row.get('Name_EN', '').strip() or None
+            name_es = row.get('Name_ES', '').strip() or None
+            
             description = row.get('Description', '').strip()
+            description_en = row.get('Description_EN', '').strip() or None
+            description_es = row.get('Description_ES', '').strip() or None
+            
+            category = row.get('Category', '').strip().lower()
             
             if not name or not category:
                 continue
@@ -197,7 +206,7 @@ async def sync_google_sheet(sheet_url: str):
                 logger.warning(f"Invalid category '{category}' for '{name}', skipping")
                 continue
             
-            # Geocode the place
+            # Geocode the place (use primary name)
             location = geocode_place(name)
             if location:
                 # Generate Google Maps URL
@@ -206,7 +215,11 @@ async def sync_google_sheet(sheet_url: str):
                 marker = {
                     "id": str(uuid.uuid4()),
                     "name": name,
+                    "name_en": name_en,
+                    "name_es": name_es,
                     "description": description or f"{name} em Ilhéus",
+                    "description_en": description_en,
+                    "description_es": description_es,
                     "lat": location['lat'],
                     "lng": location['lng'],
                     "layer_id": category,
