@@ -154,7 +154,17 @@ function MapView() {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
+        // Draw icon in white
         ctx.drawImage(img, 10, 10, 24, 24);
+        
+        // Apply white color overlay to icon
+        ctx.globalCompositeOperation = 'source-in';
+        ctx.fillStyle = 'white';
+        ctx.fillRect(10, 10, 24, 24);
+        
+        // Reset composite operation
+        ctx.globalCompositeOperation = 'source-over';
+        
         setMarkerIcons(prev => ({
           ...prev,
           [layerId]: canvas.toDataURL()
