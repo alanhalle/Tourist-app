@@ -325,8 +325,8 @@ function MapView() {
                 onCloseClick={() => setSelectedMarker(null)}
               >
                 <div className="info-window" data-testid="info-window">
-                  <h3>{selectedMarker.name}</h3>
-                  <p>{selectedMarker.description}</p>
+                  <h3>{getMarkerText(selectedMarker, 'name')}</h3>
+                  <p>{getMarkerText(selectedMarker, 'description')}</p>
                   {selectedMarker.google_maps_url && (
                     <a
                       href={selectedMarker.google_maps_url}
