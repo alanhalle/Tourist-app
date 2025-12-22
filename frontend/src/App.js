@@ -106,7 +106,7 @@ function MapView() {
       setMarkers(markersRes.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast.error("Erro ao carregar dados do mapa");
+      toast.error(t('errorLoading'));
     } finally {
       setLoading(false);
     }
