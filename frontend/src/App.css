@@ -194,8 +194,19 @@ body {
   transition: color 0.3s ease;
 }
 
+.category-custom-icon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%) invert(47%) sepia(6%) saturate(351%) hue-rotate(183deg) brightness(95%) contrast(88%);
+  transition: filter 0.3s ease;
+}
+
 .category-btn.active .category-icon-wrapper svg {
   color: white;
+}
+
+.category-btn.active .category-custom-icon {
+  filter: brightness(0) saturate(100%) invert(100%);
 }
 
 .category-label {
