@@ -120,13 +120,13 @@ function MapView() {
     );
   }, []);
 
-  // Close info window when language changes
+  // Close and reopen info window when language changes to show translated text
   useEffect(() => {
     if (selectedMarker) {
-      // Force re-render by updating the selected marker
-      const updatedMarker = { ...selectedMarker };
+      const temp = selectedMarker;
       setSelectedMarker(null);
-      setTimeout(() => setSelectedMarker(updatedMarker), 10);
+      // Reopen with slight delay to force re-render
+      setTimeout(() => setSelectedMarker(temp), 50);
     }
   }, [language]);
 
