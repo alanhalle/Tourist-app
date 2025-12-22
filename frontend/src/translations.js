@@ -70,8 +70,9 @@ export const translations = {
     backToMap: "Volver al Mapa",
     instructions: "Instrucciones:",
     instructionsList: [
-      "Cree una Hoja de Google con columnas: <strong>Name</strong>, <strong>Category</strong>, <strong>Description</strong>",
+      "Cree una Hoja de Google con columnas: <strong>Name</strong>, <strong>Name_EN</strong>, <strong>Name_ES</strong>, <strong>Description</strong>, <strong>Description_EN</strong>, <strong>Description_ES</strong>, <strong>Category</strong>",
       "Categorías válidas: <code>restaurants</code>, <code>hotels</code>, <code>beaches</code>, <code>sights</code>",
+      "Columnas opcionales: <strong>Name_EN</strong>, <strong>Name_ES</strong>, <strong>Description_EN</strong>, <strong>Description_ES</strong> (deje en blanco para usar el idioma predeterminado)",
       "Comparta la hoja públicamente (Cualquiera con el enlace → Lector)",
       "Pegue la URL completa de la hoja a continuación"
     ],
