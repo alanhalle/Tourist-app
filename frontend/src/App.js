@@ -4,9 +4,10 @@ import axios from "axios";
 import { LoadScript, GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { MapPin, Settings, Utensils, Hotel, Waves, Landmark } from "lucide-react";
+import { MapPin, Settings, Utensils, Hotel, Waves, Landmark, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { getBrowserLanguage, useTranslation } from "./translations";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
