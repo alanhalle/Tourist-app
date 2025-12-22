@@ -9,6 +9,7 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   overflow: hidden;
+  background: #F5F1E8;
 }
 
 .App {
