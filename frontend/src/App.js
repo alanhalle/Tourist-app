@@ -224,11 +224,20 @@ function MapView() {
 
   const getMarkerText = (marker, field) => {
     // Return text based on selected language
-    if (language === 'en' && marker[`${field}_en`]) {
-      return marker[`${field}_en`];
+    const enField = `${field}_en`;
+    const esField = `${field}_es`;
+    
+    console.log(`Getting ${field} for language ${language}:`, {
+      pt: marker[field]?.substring(0, 30),
+      en: marker[enField]?.substring(0, 30),
+      es: marker[esField]?.substring(0, 30)
+    });
+    
+    if (language === 'en' && marker[enField]) {
+      return marker[enField];
     }
-    if (language === 'es' && marker[`${field}_es`]) {
-      return marker[`${field}_es`];
+    if (language === 'es' && marker[esField]) {
+      return marker[esField];
     }
     // Default to Portuguese
     return marker[field];
