@@ -21,7 +21,7 @@ export default function Admin() {
 
   const handleSync = async () => {
     if (!sheetUrl.trim()) {
-      toast.error("Por favor, insira a URL do Google Sheet");
+      toast.error(t('syncError'));
       return;
     }
 
@@ -42,7 +42,7 @@ export default function Admin() {
       }
     } catch (error) {
       console.error("Sync error:", error);
-      const errorMsg = error.response?.data?.detail || "Erro ao sincronizar";
+      const errorMsg = error.response?.data?.detail || t('syncError');
       toast.error(errorMsg);
       setResult({ success: false, message: errorMsg });
     } finally {
