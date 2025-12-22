@@ -245,15 +245,18 @@ function MapView() {
             zoom={14}
             options={mapOptions}
           >
-            {getVisibleMarkers().map((marker) => (
-              <Marker
-                key={marker.id}
-                position={{ lat: marker.lat, lng: marker.lng }}
-                icon={createCustomIcon(getLayerColor(marker.layer_id), marker.layer_id)}
-                onClick={() => setSelectedMarker(marker)}
-                title={marker.name}
-              />
-            ))}
+            {getVisibleMarkers().map((marker) => {
+              const icon = createCustomIcon(marker.layer_id);
+              return icon ? (
+                <Marker
+                  key={marker.id}
+                  position={{ lat: marker.lat, lng: marker.lng }}
+                  icon={icon}
+                  onClick={() => setSelectedMarker(marker)}
+                  title={marker.name}
+                />
+              ) : null;
+            })}
 
             {selectedMarker && (
               <InfoWindow
