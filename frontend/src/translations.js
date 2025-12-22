@@ -26,8 +26,9 @@ export const translations = {
     backToMap: "Back to Map",
     instructions: "Instructions:",
     instructionsList: [
-      "Create a Google Sheet with columns: <strong>Name</strong>, <strong>Category</strong>, <strong>Description</strong>",
+      "Create a Google Sheet with columns: <strong>Name</strong>, <strong>Name_EN</strong>, <strong>Name_ES</strong>, <strong>Description</strong>, <strong>Description_EN</strong>, <strong>Description_ES</strong>, <strong>Category</strong>",
       "Valid categories: <code>restaurants</code>, <code>hotels</code>, <code>beaches</code>, <code>sights</code>",
+      "Optional columns: <strong>Name_EN</strong>, <strong>Name_ES</strong>, <strong>Description_EN</strong>, <strong>Description_ES</strong> (leave blank to use default language)",
       "Share the sheet publicly (Anyone with link → Viewer)",
       "Paste the full sheet URL below"
     ],
