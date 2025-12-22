@@ -239,7 +239,6 @@ function MapView() {
             const categoryInfo = categoryIcons[layer.id];
             if (!categoryInfo) return null;
             
-            const Icon = categoryInfo.icon;
             const isActive = layer.visible;
             
             return (
@@ -253,7 +252,11 @@ function MapView() {
                 }}
               >
                 <div className="category-icon-wrapper">
-                  <Icon size={24} />
+                  <img 
+                    src={`/${categoryInfo.customIcon}`} 
+                    alt={categoryInfo.label}
+                    className="category-custom-icon"
+                  />
                 </div>
                 <span className="category-label">{categoryInfo.label}</span>
               </button>
