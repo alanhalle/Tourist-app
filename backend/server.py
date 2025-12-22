@@ -273,28 +273,28 @@ async def seed_database():
             {
                 "id": "restaurants",
                 "name": "Restaurantes",
-                "color": "#FF6B6B",
+                "color": "#FF4444",
                 "icon": "restaurant",
                 "visible": True
             },
             {
                 "id": "hotels",
                 "name": "Hotéis",
-                "color": "#4ECDC4",
+                "color": "#7BDCB5",
                 "icon": "hotel",
                 "visible": True
             },
             {
                 "id": "sights",
                 "name": "Pontos Turísticos",
-                "color": "#FFD93D",
+                "color": "#4A90E2",
                 "icon": "place",
                 "visible": True
             },
             {
                 "id": "beaches",
                 "name": "Praias",
-                "color": "#95E1D3",
+                "color": "#FFD93D",
                 "icon": "beach_access",
                 "visible": True
             }
