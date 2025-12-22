@@ -142,29 +142,35 @@ function MapView() {
         canvas.height = 44;
         const ctx = canvas.getContext('2d');
 
-        // Draw circle background
-        ctx.beginPath();
-        ctx.arc(22, 22, 20, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
-        ctx.fill();
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        // Load and draw icon
+        // Load icon first
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = () => {
-          // Draw icon
-          ctx.drawImage(img, 10, 10, 24, 24);
+          // Step 1: Draw colored circle background
+          ctx.beginPath();
+          ctx.arc(22, 22, 20, 0, 2 * Math.PI);
+          ctx.fillStyle = color;
+          ctx.fill();
+          ctx.strokeStyle = 'white';
+          ctx.lineWidth = 3;
+          ctx.stroke();
+
+          // Step 2: Create a temporary canvas for the icon
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = 24;
+          tempCanvas.height = 24;
+          const tempCtx = tempCanvas.getContext('2d');
           
-          // Apply white color overlay to icon
-          ctx.globalCompositeOperation = 'source-in';
-          ctx.fillStyle = 'white';
-          ctx.fillRect(10, 10, 24, 24);
+          // Draw icon on temp canvas
+          tempCtx.drawImage(img, 0, 0, 24, 24);
           
-          // Reset composite operation
-          ctx.globalCompositeOperation = 'source-over';
+          // Make it white using compositing
+          tempCtx.globalCompositeOperation = 'source-in';
+          tempCtx.fillStyle = 'white';
+          tempCtx.fillRect(0, 0, 24, 24);
+          
+          // Step 3: Draw the white icon onto the main canvas
+          ctx.drawImage(tempCanvas, 10, 10);
           
           resolve({ layerId, dataUrl: canvas.toDataURL() });
         };
@@ -172,7 +178,7 @@ function MapView() {
           console.error(`Failed to load icon: ${iconPath}`);
           resolve({ layerId, dataUrl: null });
         };
-        img.src = iconPath + '?t=' + Date.now(); // Cache bust
+        img.src = iconPath + '?t=' + Date.now();
       });
     };
 
@@ -196,6 +202,7 @@ function MapView() {
             icons[result.layerId] = result.dataUrl;
           }
         });
+        console.log('Generated marker icons:', Object.keys(icons));
         setMarkerIcons(icons);
       });
     }
