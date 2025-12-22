@@ -226,7 +226,7 @@ function MapView() {
     return (
       <div className="loading-container" data-testid="loading-spinner">
         <div className="spinner"></div>
-        <p>Carregando mapa de Ilhéus...</p>
+        <p>{t('loadingMap')}</p>
       </div>
     );
   }
