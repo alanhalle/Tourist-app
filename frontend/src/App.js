@@ -131,32 +131,60 @@ function MapView() {
     [layers]
   );
 
-  const createCustomIcon = (color, layerId) => {
-    // Map layer IDs to icon filenames
-    const iconFiles = {
-      restaurants: 'restaurant-icon.png',
-      hotels: 'hotel-icon.png',
-      sights: 'camera-icon.png',
-      beaches: 'beach-icon.png'
+  const [markerIcons, setMarkerIcons] = useState({});
+
+  // Create marker icons on mount
+  useEffect(() => {
+    const createMarkerIcon = (color, iconPath, layerId) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 44;
+      canvas.height = 44;
+      const ctx = canvas.getContext('2d');
+
+      // Draw circle background
+      ctx.beginPath();
+      ctx.arc(22, 22, 20, 0, 2 * Math.PI);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Load and draw icon
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        ctx.drawImage(img, 10, 10, 24, 24);
+        setMarkerIcons(prev => ({
+          ...prev,
+          [layerId]: canvas.toDataURL()
+        }));
+      };
+      img.src = iconPath;
     };
 
-    const iconFile = iconFiles[layerId] || iconFiles.sights;
+    // Only create icons once layers are loaded
+    if (layers.length > 0) {
+      layers.forEach(layer => {
+        const iconFiles = {
+          restaurants: '/restaurant-icon.png',
+          hotels: '/hotel-icon.png',
+          sights: '/camera-icon.png',
+          beaches: '/beach-icon.png'
+        };
+        createMarkerIcon(layer.color, iconFiles[layer.id], layer.id);
+      });
+    }
+  }, [layers]);
+
+  const createCustomIcon = (layerId) => {
+    if (!markerIcons[layerId]) return null;
     
-    // Create SVG with circle background and embedded icon image
-    const svg = `
-      <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="22" cy="22" r="20" fill="${color}" stroke="white" stroke-width="3"/>
-        <image href="/${iconFile}" x="10" y="10" width="24" height="24"/>
-      </svg>
-    `;
-    
-    const icon = {
-      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+    return {
+      url: markerIcons[layerId],
       scaledSize: { width: 44, height: 44 },
       anchor: { x: 22, y: 22 }
     };
-    
-    return icon;
   };
 
   if (loading) {
