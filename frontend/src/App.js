@@ -78,14 +78,17 @@ function MapView() {
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [language, setLanguage] = useState(getBrowserLanguage());
   const navigate = useNavigate();
+  
+  const { t } = useTranslation(language);
 
   // Category icons mapping
   const categoryIcons = {
-    restaurants: { icon: Utensils, label: "Restaurantes", customIcon: "restaurant-icon.png" },
-    hotels: { icon: Hotel, label: "Hotéis", customIcon: "hotel-icon.png" },
-    beaches: { icon: Waves, label: "Praias", customIcon: "beach-icon.png" },
-    sights: { icon: Landmark, label: "Pontos Turísticos", customIcon: "camera-icon.png" }
+    restaurants: { icon: Utensils, label: t('restaurants'), customIcon: "restaurant-icon.png" },
+    hotels: { icon: Hotel, label: t('hotels'), customIcon: "hotel-icon.png" },
+    beaches: { icon: Waves, label: t('beaches'), customIcon: "beach-icon.png" },
+    sights: { icon: Landmark, label: t('sights'), customIcon: "camera-icon.png" }
   };
 
   useEffect(() => {
