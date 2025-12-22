@@ -60,23 +60,22 @@ export default function Admin() {
           className="back-btn"
         >
           <ArrowLeft size={20} />
-          Voltar ao Mapa
+          {t('backToMap')}
         </Button>
-        <h1>Painel de Administração</h1>
-        <p>Sincronize marcadores do Google Sheets</p>
+        <h1>{t('adminTitle')}</h1>
+        <p>{t('syncGoogleSheet')}</p>
       </div>
 
       <div className="admin-content">
         <div className="sync-card">
-          <h2>Sincronizar Google Sheet</h2>
+          <h2>{t('syncGoogleSheet')}</h2>
           
           <div className="instructions">
-            <h3>Instruções:</h3>
+            <h3>{t('instructions')}</h3>
             <ol>
-              <li>Crie um Google Sheet com as colunas: <strong>Name</strong>, <strong>Category</strong>, <strong>Description</strong></li>
-              <li>Categorias válidas: <code>restaurants</code>, <code>hotels</code>, <code>beaches</code>, <code>sights</code></li>
-              <li>Compartilhe o sheet publicamente (Qualquer pessoa com o link → Leitor)</li>
-              <li>Cole a URL completa do sheet abaixo</li>
+              {t('instructionsList').map((instruction, idx) => (
+                <li key={idx} dangerouslySetInnerHTML={{ __html: instruction }} />
+              ))}
             </ol>
           </div>
 
@@ -84,7 +83,7 @@ export default function Admin() {
             <Input
               data-testid="sheet-url-input"
               type="text"
-              placeholder="https://docs.google.com/spreadsheets/d/..."
+              placeholder={t('sheetUrlPlaceholder')}
               value={sheetUrl}
               onChange={(e) => setSheetUrl(e.target.value)}
               disabled={syncing}
@@ -99,12 +98,12 @@ export default function Admin() {
               {syncing ? (
                 <>
                   <RefreshCw className="spinning" size={20} />
-                  Sincronizando...
+                  {t('syncing')}
                 </>
               ) : (
                 <>
                   <RefreshCw size={20} />
-                  Sincronizar
+                  {t('syncButton')}
                 </>
               )}
             </Button>
@@ -122,12 +121,12 @@ export default function Admin() {
               </div>
               
               {result.markers_added && (
-                <p>✓ {result.markers_added} marcadores adicionados</p>
+                <p>✓ {result.markers_added} {t('markersAdded')}</p>
               )}
               
               {result.geocode_errors && result.geocode_errors.length > 0 && (
                 <div className="errors">
-                  <p><strong>Erros de geocodificação:</strong></p>
+                  <p><strong>{t('geocodingErrors')}</strong></p>
                   <ul>
                     {result.geocode_errors.map((name, idx) => (
                       <li key={idx}>{name}</li>
