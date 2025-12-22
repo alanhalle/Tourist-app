@@ -325,7 +325,7 @@ function MapView() {
                       className="maps-link"
                       data-testid="google-maps-link"
                     >
-                      Abrir no Google Maps →
+                      {t('openInGoogleMaps')}
                     </a>
                   )}
                 </div>
