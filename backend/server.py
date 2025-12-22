@@ -45,7 +45,11 @@ class Marker(BaseModel):
     
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
+    name_en: Optional[str] = None
+    name_es: Optional[str] = None
     description: str
+    description_en: Optional[str] = None
+    description_es: Optional[str] = None
     lat: float
     lng: float
     layer_id: str
