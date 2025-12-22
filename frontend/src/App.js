@@ -133,56 +133,70 @@ function MapView() {
 
   const [markerIcons, setMarkerIcons] = useState({});
 
-  // Create marker icons on mount
+  // Create marker icons when layers change
   useEffect(() => {
     const createMarkerIcon = (color, iconPath, layerId) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 44;
-      canvas.height = 44;
-      const ctx = canvas.getContext('2d');
+      return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 44;
+        canvas.height = 44;
+        const ctx = canvas.getContext('2d');
 
-      // Draw circle background
-      ctx.beginPath();
-      ctx.arc(22, 22, 20, 0, 2 * Math.PI);
-      ctx.fillStyle = color;
-      ctx.fill();
-      ctx.strokeStyle = 'white';
-      ctx.lineWidth = 3;
-      ctx.stroke();
+        // Draw circle background
+        ctx.beginPath();
+        ctx.arc(22, 22, 20, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 3;
+        ctx.stroke();
 
-      // Load and draw icon
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        // Draw icon in white
-        ctx.drawImage(img, 10, 10, 24, 24);
-        
-        // Apply white color overlay to icon
-        ctx.globalCompositeOperation = 'source-in';
-        ctx.fillStyle = 'white';
-        ctx.fillRect(10, 10, 24, 24);
-        
-        // Reset composite operation
-        ctx.globalCompositeOperation = 'source-over';
-        
-        setMarkerIcons(prev => ({
-          ...prev,
-          [layerId]: canvas.toDataURL()
-        }));
-      };
-      img.src = iconPath;
+        // Load and draw icon
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          // Draw icon
+          ctx.drawImage(img, 10, 10, 24, 24);
+          
+          // Apply white color overlay to icon
+          ctx.globalCompositeOperation = 'source-in';
+          ctx.fillStyle = 'white';
+          ctx.fillRect(10, 10, 24, 24);
+          
+          // Reset composite operation
+          ctx.globalCompositeOperation = 'source-over';
+          
+          resolve({ layerId, dataUrl: canvas.toDataURL() });
+        };
+        img.onerror = () => {
+          console.error(`Failed to load icon: ${iconPath}`);
+          resolve({ layerId, dataUrl: null });
+        };
+        img.src = iconPath + '?t=' + Date.now(); // Cache bust
+      });
     };
 
-    // Only create icons once layers are loaded
+    // Generate icons when layers are loaded
     if (layers.length > 0) {
-      layers.forEach(layer => {
-        const iconFiles = {
-          restaurants: '/restaurant-icon.png',
-          hotels: '/hotel-icon.png',
-          sights: '/camera-icon.png',
-          beaches: '/beach-icon.png'
-        };
-        createMarkerIcon(layer.color, iconFiles[layer.id], layer.id);
+      const iconFiles = {
+        restaurants: '/restaurant-icon.png',
+        hotels: '/hotel-icon.png',
+        sights: '/camera-icon.png',
+        beaches: '/beach-icon.png'
+      };
+
+      const promises = layers.map(layer => 
+        createMarkerIcon(layer.color, iconFiles[layer.id], layer.id)
+      );
+
+      Promise.all(promises).then(results => {
+        const icons = {};
+        results.forEach(result => {
+          if (result.dataUrl) {
+            icons[result.layerId] = result.dataUrl;
+          }
+        });
+        setMarkerIcons(icons);
       });
     }
   }, [layers]);
