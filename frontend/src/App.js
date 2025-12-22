@@ -212,7 +212,17 @@ function MapView() {
     }
   }, [layers]);
 
-  const createCustomIcon = (layerId) => {
+  const getMarkerText = (marker, field) => {
+    // Return text based on selected language
+    if (language === 'en' && marker[`${field}_en`]) {
+      return marker[`${field}_en`];
+    }
+    if (language === 'es' && marker[`${field}_es`]) {
+      return marker[`${field}_es`];
+    }
+    // Default to Portuguese
+    return marker[field];
+  };
     if (!markerIcons[layerId]) return null;
     
     return {
