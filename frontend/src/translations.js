@@ -114,8 +114,9 @@ export const translations = {
     backToMap: "Voltar ao Mapa",
     instructions: "Instruções:",
     instructionsList: [
-      "Crie um Google Sheet com as colunas: <strong>Name</strong>, <strong>Category</strong>, <strong>Description</strong>",
+      "Crie um Google Sheet com as colunas: <strong>Name</strong>, <strong>Name_EN</strong>, <strong>Name_ES</strong>, <strong>Description</strong>, <strong>Description_EN</strong>, <strong>Description_ES</strong>, <strong>Category</strong>",
       "Categorias válidas: <code>restaurants</code>, <code>hotels</code>, <code>beaches</code>, <code>sights</code>",
+      "Colunas opcionais: <strong>Name_EN</strong>, <strong>Name_ES</strong>, <strong>Description_EN</strong>, <strong>Description_ES</strong> (deixe em branco para usar o idioma padrão)",
       "Compartilhe o sheet publicamente (Qualquer pessoa com o link → Leitor)",
       "Cole a URL completa do sheet abaixo"
     ],
