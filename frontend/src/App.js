@@ -223,7 +223,7 @@ function MapView() {
               <Marker
                 key={marker.id}
                 position={{ lat: marker.lat, lng: marker.lng }}
-                icon={createCustomIcon(getLayerColor(marker.layer_id))}
+                icon={createCustomIcon(getLayerColor(marker.layer_id), marker.layer_id)}
                 onClick={() => setSelectedMarker(marker)}
                 title={marker.name}
               />
