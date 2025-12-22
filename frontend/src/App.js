@@ -223,6 +223,8 @@ function MapView() {
     // Default to Portuguese
     return marker[field];
   };
+
+  const createCustomIcon = (layerId) => {
     if (!markerIcons[layerId]) return null;
     
     return {
