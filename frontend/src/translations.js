@@ -12,7 +12,7 @@ export const translations = {
     restaurants: "Restaurants",
     hotels: "Hotels",
     beaches: "Beaches",
-    sights: "Tourist Attractions",
+    sights: "Sights",
     
     // Info Window
     openInGoogleMaps: "Open in Google Maps →",
