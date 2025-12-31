@@ -269,8 +269,11 @@ function MapView() {
         <header className="map-header" data-testid="map-header">
           <div className="header-content">
             <div className="header-title">
-              <MapPin className="header-icon" />
-              <h1>{t('appTitle')}</h1>
+              <img 
+                src="/header-logo.png" 
+                alt="O Melhor de Ilhéus" 
+                className="header-logo"
+              />
             </div>
             <div className="language-selector">
               <Globe size={20} />
