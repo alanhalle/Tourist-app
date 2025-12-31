@@ -354,6 +354,10 @@ body {
     font-size: 1.25rem;
   }
 
+  .header-logo {
+    height: 35px;
+  }
+
   .header-icon {
     width: 24px;
     height: 24px;
