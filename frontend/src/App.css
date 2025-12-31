@@ -63,15 +63,14 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: #333;
 }
 
 .language-dropdown {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: #F5F5F5;
+  border: 1px solid #E0E0E0;
   border-radius: 8px;
-  color: white;
+  color: #333;
   padding: 0.5rem 1rem;
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
@@ -82,12 +81,13 @@ body {
 }
 
 .language-dropdown:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: #EBEBEB;
+  border-color: #CCC;
 }
 
 .language-dropdown option {
-  background: #FF6B6B;
-  color: white;
+  background: white;
+  color: #333;
 }
 
 .header-icon {
