@@ -26,8 +26,8 @@ body {
   left: 0;
   right: 0;
   height: 70px;
-  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFA94D 100%);
-  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+  background: #FFFFFF;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -54,9 +54,9 @@ body {
 }
 
 .header-logo {
-  height: 55px;
+  height: 50px;
   width: auto;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  object-fit: contain;
 }
 
 .language-selector {
