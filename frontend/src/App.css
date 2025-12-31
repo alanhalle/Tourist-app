@@ -346,7 +346,7 @@ body {
 /* Responsive */
 @media (max-width: 768px) {
   .map-header {
-    height: 60px;
+    height: 65px;
     padding: 0 1rem;
   }
 
@@ -355,7 +355,7 @@ body {
   }
 
   .header-logo {
-    height: 40px;
+    height: 50px;
   }
 
   .header-icon {
@@ -364,7 +364,7 @@ body {
   }
 
   .map-container {
-    top: 60px;
+    top: 65px;
     bottom: 80px;
   }
 
